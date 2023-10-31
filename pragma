@@ -1,0 +1,30 @@
+pragma solidity ^0.8.0;
+
+contract MyContract {
+    // Store the contract owner's address
+    address public owner = msg.sender;
+
+    // A mapping to store data associated with each user
+    mapping(address => uint256) public userData;
+
+    // Modifier to check if the sender is the owner
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Unauthorized: Only the owner can call this function");
+        _;
+    }
+
+    // Constructor function to set the initial owner
+    constructor() {
+        owner = msg.sender;
+    }
+
+    // A function to update user data (only the owner can call it)
+    function updateUser(address user, uint256 data) public onlyOwner {
+        userData[user] = data;
+    }
+
+    // A function to retrieve user data
+    function getUserData(address user) public view returns (uint256) {
+        return userData[user];
+    }
+}
