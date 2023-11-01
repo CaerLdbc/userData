@@ -1,0 +1,19 @@
+pragma solidity ^0.8.0;
+
+contract MyContract {
+    address public owner = msg.sender;
+    mapping(address => string) public userData;
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Unauthorized");
+        _;
+    }
+
+    function updateData(string memory newData) public onlyOwner {
+        userData[msg.sender] = newData;
+    }
+
+    function getUserData() public view returns (string memory) {
+        return userData[msg.sender];
+    }
+}
