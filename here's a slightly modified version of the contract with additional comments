@@ -1,0 +1,22 @@
+pragma solidity ^0.8.0;
+
+contract MyContract {
+    // Store the contract owner's address
+    address public owner = msg.sender;
+
+    // Modifier to check if the sender is the owner
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Unauthorized: Only the owner can call this function");
+        _;
+    }
+
+    // Constructor sets the contract owner as the sender
+    constructor() {
+        owner = msg.sender;
+    }
+
+    // A function that only the owner can call using the "onlyOwner" modifier
+    function myFunction() public view onlyOwner returns (string memory) {
+        return "This function can only be called by the owner";
+    }
+}
