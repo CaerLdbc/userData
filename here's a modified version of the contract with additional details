@@ -1,0 +1,27 @@
+pragma solidity ^0.8.0;
+
+contract MyContract {
+    // Store the contract owner's address
+    address public owner = msg.sender;
+
+    // Event to log when myFunction is called
+    event FunctionCalled(address indexed caller);
+
+    // Modifier to check if the sender is the owner
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Unauthorized: Only the owner can call this function");
+        _;
+    }
+
+    // A function that only the owner can call using the "onlyOwner" modifier
+    function myFunction() public view onlyOwner returns (string memory) {
+        // Emit an event to log the function call
+        emit FunctionCalled(msg.sender);
+        return "This function is exclusively for the owner's use";
+    }
+
+    // Function to transfer ownership to a new address
+    function transferOwnership(address newOwner) public onlyOwner {
+        owner = newOwner;
+    }
+}
