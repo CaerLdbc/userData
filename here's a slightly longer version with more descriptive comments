@@ -1,0 +1,18 @@
+pragma solidity ^0.8.0;
+
+contract MyContract {
+    // Store the Ethereum address of the contract owner
+    address public owner = msg.sender;
+
+    // Modifier to check if the sender is the owner
+    modifier onlyOwner() {
+        // Ensure the sender's address matches the owner's address
+        require(msg.sender == owner, "Unauthorized: Only the owner can call this function");
+        _;  // Continue with the function execution if the modifier passes
+    }
+
+    // A function that only the owner can call using the "onlyOwner" modifier
+    function myFunction() public view onlyOwner returns (string memory) {
+        return "This function can only be called by the owner";
+    }
+}
