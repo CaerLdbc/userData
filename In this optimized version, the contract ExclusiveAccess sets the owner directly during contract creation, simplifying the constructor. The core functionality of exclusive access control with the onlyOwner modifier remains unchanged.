@@ -1,0 +1,10 @@
+pragma solidity ^0.8.0;
+
+contract ExclusiveAccess {
+    address public owner = msg.sender;
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Unauthorized");
+        _;
+    }
+}
