@@ -1,0 +1,24 @@
+pragma solidity ^0.8.0;
+
+contract MyExclusiveContract {
+    address public owner;
+    uint256 public data;
+
+    constructor() {
+        owner = msg.sender; // Set the contract creator as the owner
+        data = 0; // Initialize the data
+    }
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Unauthorized");
+        _;
+    }
+
+    function setData(uint256 newData) public onlyOwner {
+        data = newData;
+    }
+
+    function getData() public view returns (uint256) {
+        return data;
+    }
+}
