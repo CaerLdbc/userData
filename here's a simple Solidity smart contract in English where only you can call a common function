@@ -1,0 +1,24 @@
+pragma solidity ^0.8.0;
+
+contract MyContract {
+    address public owner;
+    uint256 public balance;
+
+    constructor() {
+        owner = msg.sender; // Set the contract creator as the owner
+        balance = 0; // Initialize the balance
+    }
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Unauthorized");
+        _;
+    }
+
+    function deposit(uint256 amount) public onlyOwner {
+        balance += amount;
+    }
+
+    function getBalance() public view returns (uint256) {
+        return balance;
+    }
+}
