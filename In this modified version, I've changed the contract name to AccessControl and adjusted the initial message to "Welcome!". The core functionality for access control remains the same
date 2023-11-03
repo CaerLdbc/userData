@@ -1,0 +1,16 @@
+pragma solidity ^0.8.0;
+
+contract AccessControl {
+    address public owner;
+    string public message;
+
+    constructor() {
+        owner = msg.sender;
+        message = "Welcome!";
+    }
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Unauthorized: Only the owner can access.");
+        _;
+    }
+}
