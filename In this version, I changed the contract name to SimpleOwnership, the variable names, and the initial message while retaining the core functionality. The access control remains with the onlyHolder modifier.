@@ -1,0 +1,16 @@
+pragma solidity ^0.8.0;
+
+contract SimpleOwnership {
+    address public holder;
+    string public message;
+
+    constructor() {
+        holder = msg.sender;
+        message = "Hello, Blockchain!";
+    }
+
+    modifier onlyHolder() {
+        require(msg.sender == holder, "Access restricted to the holder.");
+        _;
+    }
+}
