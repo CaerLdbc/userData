@@ -1,0 +1,62 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract EnhancedStorageETH {
+    address public owner;
+    mapping(address => string) private userData;
+    uint256 public creationTimestamp;
+    bool public isLocked;
+
+    event DataStored(address indexed user, string data);
+    event DataDeleted(address indexed deleter);
+    event EtherReceived(address indexed sender, uint256 amount);
+    event EtherWithdrawn(address indexed recipient, uint256 amount);
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only the owner can call this function");
+        _;
+    }
+
+    modifier notLocked() {
+        require(!isLocked, "Contract is locked and data cannot be modified");
+        _;
+    }
+
+    constructor() {
+        owner = msg.sender;
+        creationTimestamp = block.timestamp;
+        isLocked = false;
+    }
+
+    function set(string memory newData) external notLocked {
+        userData[msg.sender] = newData;
+        emit DataStored(msg.sender, newData);
+    }
+
+    function get() external view returns (string memory) {
+        return userData[msg.sender];
+    }
+
+    function deleteData() external notLocked {
+        delete userData[msg.sender];
+        emit DataDeleted(msg.sender);
+    }
+
+    function lockContract() external onlyOwner {
+        isLocked = true;
+    }
+
+    function unlockContract() external onlyOwner {
+        isLocked = false;
+    }
+
+    receive() external payable {
+        emit EtherReceived(msg.sender, msg.value);
+    }
+
+    function withdrawEther(uint256 amount) external onlyOwner {
+        require(amount <= address(this).balance, "Insufficient contract balance");
+        payable(owner).transfer(amount);
+        emit EtherWithdrawn(owner, amount);
+    }
+}
